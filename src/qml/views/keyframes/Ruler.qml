@@ -30,7 +30,7 @@ Rectangle {
     }
 
     Repeater {
-        model: parent.width / (intervalSeconds * profile.fps * timeScale)
+        model: Math.ceil(parent.width / (intervalSeconds * profile.fps * timeScale))
 
         Rectangle {
 
@@ -40,9 +40,10 @@ Rectangle {
             width: 1
             color: activePalette.windowText
             x: index * intervalSeconds * profile.fps * timeScale
-            visible: ((x + width) > tracksFlickable.contentX) && (x < tracksFlickable.contentX + tracksFlickable.width) // left edge
+            visible: ((x + width + label.width) > tracksFlickable.contentX) && (x < tracksFlickable.contentX + tracksFlickable.width) // left edge
 
             Label {
+                id: label
                 anchors.left: parent.right
                 anchors.leftMargin: 2
                 anchors.bottom: parent.bottom
