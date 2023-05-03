@@ -538,7 +538,11 @@ Rectangle {
                         anchors.right: tracksFlickable.right
 
                         background: Rectangle {
-                            color: Qt.lighter(parent.palette.alternateBase)
+                            color: Qt.lighter(parent.palette.window)
+                        }
+                        contentItem: Rectangle {
+                            color: Qt.lighter(parent.palette.base)
+                            radius: 5
                         }
                     }
 
@@ -553,7 +557,11 @@ Rectangle {
                         anchors.bottomMargin: -16
 
                         background: Rectangle {
-                            color: Qt.lighter(parent.palette.alternateBase)
+                            color: Qt.lighter(parent.palette.window)
+                        }
+                        contentItem: Rectangle {
+                            color: Qt.lighter(parent.palette.base)
+                            radius: 5
                         }
                     }
                 }

@@ -2867,6 +2867,13 @@ bool MainWindow::saveXML(const QString &filename, bool withRelativePaths)
     return result;
 }
 
+static bool isDarkTheme()
+{
+    const auto defaultPalette = QApplication::palette();
+    return defaultPalette.color(QPalette::WindowText).lightness()
+           > defaultPalette.color(QPalette::Window).lightness();
+}
+
 void MainWindow::changeTheme(const QString &theme)
 {
     LOG_DEBUG() << "begin";
@@ -2874,11 +2881,8 @@ void MainWindow::changeTheme(const QString &theme)
 
 #if !defined(SHOTCUT_THEME)
     // Workaround Quick Controls not using our custom palette - temporarily?
-    std::unique_ptr<QStyle> style {QStyleFactory::create("fusion")};
-    auto brightness = style->standardPalette().color(QPalette::Text).lightnessF();
-    LOG_DEBUG() << brightness;
-    mytheme = brightness < 0.5f ? "light" : "dark";
     QApplication::setStyle("Fusion");
+    mytheme = isDarkTheme() ? "dark" : "light";
     QIcon::setThemeName(mytheme);
 # if defined(Q_OS_MAC)
     if (mytheme == "dark") {
@@ -2887,7 +2891,9 @@ void MainWindow::changeTheme(const QString &theme)
         QGuiApplication::setPalette(palette);
     }
 # elif defined(Q_OS_WIN)
-    QGuiApplication::setPalette(style->standardPalette());
+    auto palette = QGuiApplication::palette();
+    palette.setColor(QPalette::AlternateBase, palette.window().color());
+    QApplication::setPalette(palette);
 # endif
 #else
     if (mytheme == "dark") {
